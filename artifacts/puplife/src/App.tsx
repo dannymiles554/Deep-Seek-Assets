@@ -21,6 +21,7 @@ export default function App() {
         <Gallery />
         <FAQ />
         <CTASection />
+        <ContactBar />
       </main>
       <Footer />
     </div>
@@ -164,8 +165,8 @@ function Hero() {
     <section
       className="relative overflow-hidden"
       style={{
-        paddingTop: "120px",
-        paddingBottom: "80px",
+        paddingTop: "140px",
+        paddingBottom: "120px",
         background: "#0F0A05",
         backgroundImage: `
           radial-gradient(ellipse 80% 60% at 60% 50%, rgba(212,175,55,0.07) 0%, transparent 70%),
@@ -188,9 +189,17 @@ function Hero() {
               <span className="absolute bottom-1 left-0 w-full h-2 rounded-full" style={{ background: "rgba(212,175,55,0.2)" }} />
             </span>
           </h1>
-          <p className="text-lg mb-10 leading-relaxed" style={{ color: "rgba(253,248,240,0.7)" }}>
+          <p className="text-lg mb-8 leading-relaxed" style={{ color: "rgba(253,248,240,0.7)" }}>
             Handcrafted hoods, harnesses, collars, and accessories made for the human pup play community. Premium materials. Bold designs. Custom to your style.
           </p>
+          <div className="flex flex-wrap gap-8 mb-10">
+            {[{ val: "500+", label: "Orders Shipped" }, { val: "8+", label: "Colourways" }, { val: "100%", label: "Handcrafted" }].map((s) => (
+              <div key={s.label}>
+                <div className="text-3xl font-black" style={{ color: "#D4AF37" }}>{s.val}</div>
+                <div className="text-xs uppercase tracking-widest mt-1" style={{ color: "rgba(253,248,240,0.5)" }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
           <div className="flex flex-wrap gap-4">
             <a
               href="#products"
@@ -544,27 +553,66 @@ function CustomOrders() {
 }
 
 /* ===================== TESTIMONIALS ===================== */
-function Testimonials() {
-  const reviews = [
-    {
-      quote: "The custom hood I ordered is absolutely incredible. The neoprene is top quality and the colours are exactly what I wanted. Got so many compliments at my first mosh!",
-      name: "Alex M.",
-      role: "Pup Alpha",
-    },
-    {
-      quote: "Best harness I've owned. The stitching is immaculate and it fits perfectly even with my custom measurements. Fast shipping too — would recommend to the whole pack.",
-      name: "Jamie R.",
-      role: "Pup Enthusiast",
-    },
-  ];
-
+function StarRating({ rating }: { rating: number }) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  const empty = 5 - full - (half ? 1 : 0);
   return (
-    <section
-      style={{
-        padding: "100px 24px",
-        background: "#130E07",
-      }}
-    >
+    <div className="flex gap-0.5 mb-4">
+      {Array(full).fill(0).map((_, i) => (
+        <span key={`f${i}`} style={{ color: "#D4AF37", fontSize: "18px" }}>★</span>
+      ))}
+      {half && <span style={{ color: "#D4AF37", fontSize: "18px" }}>½</span>}
+      {Array(empty).fill(0).map((_, i) => (
+        <span key={`e${i}`} style={{ color: "rgba(212,175,55,0.25)", fontSize: "18px" }}>★</span>
+      ))}
+      <span className="ml-2 text-sm font-semibold" style={{ color: "rgba(253,248,240,0.5)" }}>{rating}/5</span>
+    </div>
+  );
+}
+
+const REVIEWS = [
+  {
+    quote: "The custom hood I ordered is absolutely incredible. The neoprene is top quality and the colours are exactly what I wanted. Got so many compliments at my first mosh!",
+    name: "Alex M.",
+    role: "Pup Alpha",
+    rating: 5,
+  },
+  {
+    quote: "Best harness I've owned. The stitching is immaculate and it fits perfectly even with my custom measurements. Fast shipping too — would recommend to the whole pack.",
+    name: "Jamie R.",
+    role: "Pup Enthusiast",
+    rating: 5,
+  },
+  {
+    quote: "Really happy with my collar and harness set. The build quality is solid and the sizing guide was spot on. Only minor thing was the wait time but worth it for custom work.",
+    name: "Chris T.",
+    role: "Verified Buyer",
+    rating: 4,
+  },
+  {
+    quote: "The paw mitts are so well made — plush, padded, and actually durable. Shipping was discreet and fast. Would love even more colour options in the future!",
+    name: "Morgan K.",
+    role: "Happy Pup",
+    rating: 4.5,
+  },
+  {
+    quote: "Ordered the red/black hood and it looks even better in person. Craftsmanship is top tier. Had a small sizing question and got a fast, helpful reply. Very satisfied.",
+    name: "Sam D.",
+    role: "Returning Customer",
+    rating: 4.5,
+  },
+  {
+    quote: "Good quality gear and genuinely unique designs you can't find anywhere else. The neon green cyber hood is a statement piece. Delivery took a bit longer than expected but no complaints.",
+    name: "Riley B.",
+    role: "First-Time Buyer",
+    rating: 4,
+  },
+];
+
+function Testimonials() {
+  return (
+    <section style={{ padding: "100px 24px", background: "#130E07" }}>
       <div className="max-w-[1200px] mx-auto">
         <div className="text-center mb-14">
           <span
@@ -576,10 +624,11 @@ function Testimonials() {
           <h2 className="text-4xl md:text-5xl font-bold" style={{ color: "#FDF8F0" }}>
             Happy <span style={{ color: "#D4AF37" }}>Customers</span>
           </h2>
+          <p className="mt-3 text-[15px]" style={{ color: "rgba(253,248,240,0.5)" }}>Real reviews from the pack</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {reviews.map((r, i) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {REVIEWS.map((r, i) => (
             <TestimonialCard key={i} {...r} />
           ))}
         </div>
@@ -588,13 +637,13 @@ function Testimonials() {
   );
 }
 
-function TestimonialCard({ quote, name, role }: { quote: string; name: string; role: string }) {
+function TestimonialCard({ quote, name, role, rating }: { quote: string; name: string; role: string; rating: number }) {
   const [hovered, setHovered] = useState(false);
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="p-10 rounded-2xl"
+      className="p-8 rounded-2xl flex flex-col"
       style={{
         background: "#1A1208",
         border: hovered ? "1px solid rgba(212,175,55,0.4)" : "1px solid rgba(212,175,55,0.1)",
@@ -603,20 +652,20 @@ function TestimonialCard({ quote, name, role }: { quote: string; name: string; r
         transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
       }}
     >
-      <div className="text-xl mb-4" style={{ color: "#D4AF37" }}>⭐⭐⭐⭐⭐</div>
-      <p className="text-[17px] italic leading-relaxed mb-8" style={{ color: "rgba(253,248,240,0.75)" }}>
+      <StarRating rating={rating} />
+      <p className="text-[16px] italic leading-relaxed flex-1 mb-6" style={{ color: "rgba(253,248,240,0.75)" }}>
         "{quote}"
       </p>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <div
-          className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-black"
+          className="w-10 h-10 rounded-full flex items-center justify-center font-black text-[15px]"
           style={{ background: "#D4AF37", color: "#0F0A05" }}
         >
           {name[0]}
         </div>
         <div>
-          <h4 className="font-bold" style={{ color: "#FDF8F0" }}>{name}</h4>
-          <span className="text-sm" style={{ color: "rgba(212,175,55,0.8)" }}>{role}</span>
+          <h4 className="font-bold text-[15px]" style={{ color: "#FDF8F0" }}>{name}</h4>
+          <span className="text-xs" style={{ color: "rgba(212,175,55,0.8)" }}>{role}</span>
         </div>
       </div>
     </div>
@@ -626,13 +675,21 @@ function TestimonialCard({ quote, name, role }: { quote: string; name: string; r
 /* ===================== GALLERY ===================== */
 const GALLERY = [
   { src: "hood-purple-silver.jpeg", alt: "Purple & Silver Hood" },
+  { src: "hood-red-gold.jpeg", alt: "Red & Gold Hood" },
   { src: "hood-brown-green.jpeg", alt: "Brown & Green Distressed Hood" },
   { src: "hood-neon-green.jpeg", alt: "Neon Cyber Hood" },
   { src: "hood-blue-black.jpeg", alt: "Blue & Black Hood" },
-  { src: "collar-red.jpeg", alt: "Red Padded Collar" },
-  { src: "harness-black-red.jpeg", alt: "Black & Red Harness" },
-  { src: "paw-gloves.jpeg", alt: "Faux Fur Paw Mitts" },
+  { src: "hood-black-purple.jpeg", alt: "Black & Purple Hood" },
   { src: "hood-red-black.jpeg", alt: "Red & Black Hood" },
+  { src: "collar-red.jpeg", alt: "Red Padded Collar" },
+  { src: "collar-blue.jpeg", alt: "Blue Collar" },
+  { src: "collar-black.jpeg", alt: "Black Collar" },
+  { src: "harness-yellow.jpeg", alt: "Yellow Harness" },
+  { src: "harness-blue.jpeg", alt: "Blue Harness" },
+  { src: "harness-black-red.jpeg", alt: "Black & Red Harness" },
+  { src: "harness-red.jpeg", alt: "Red Harness" },
+  { src: "paw-gloves.jpeg", alt: "Faux Fur Paw Mitts" },
+  { src: "kneepads.jpeg", alt: "Protective Knee Pads" },
 ];
 
 function Gallery() {
@@ -660,7 +717,7 @@ function Gallery() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {GALLERY.map((g, i) => (
             <div
               key={i}
@@ -673,7 +730,7 @@ function Gallery() {
               onMouseEnter={() => setActive(g.src)}
               onMouseLeave={() => setActive(null)}
             >
-              <img src={img(g.src)} alt={g.alt} className="w-full object-cover" style={{ height: "220px" }} />
+              <img src={img(g.src)} alt={g.alt} className="w-full object-cover" style={{ height: "200px" }} />
             </div>
           ))}
         </div>
@@ -801,6 +858,47 @@ function CTASection() {
         </a>
       </div>
     </section>
+  );
+}
+
+/* ===================== CONTACT BAR ===================== */
+function ContactBar() {
+  return (
+    <div
+      style={{
+        background: "linear-gradient(90deg, #1A1208, #221A08, #1A1208)",
+        borderTop: "1px solid rgba(212,175,55,0.2)",
+        borderBottom: "1px solid rgba(212,175,55,0.2)",
+        padding: "40px 24px",
+      }}
+    >
+      <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "rgba(212,175,55,0.7)" }}>Have a question or want to order?</p>
+          <p className="text-2xl font-black" style={{ color: "#FDF8F0" }}>Get in touch with us directly</p>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <a
+            href="mailto:jakiemarson104@gmail.com"
+            className="flex items-center gap-3 px-8 py-4 rounded-full font-bold text-lg"
+            style={{ background: "#D4AF37", color: "#0F0A05", transition: "all 0.3s", boxShadow: "0 8px 32px rgba(212,175,55,0.35)", whiteSpace: "nowrap" }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(212,175,55,0.5)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(212,175,55,0.35)"; }}
+          >
+            ✉ jakiemarson104@gmail.com
+          </a>
+          <a
+            href="https://discord.com"
+            className="px-6 py-4 rounded-full font-semibold text-base"
+            style={{ border: "1px solid rgba(212,175,55,0.4)", color: "#D4AF37", transition: "all 0.3s", whiteSpace: "nowrap" }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#D4AF37"; e.currentTarget.style.background = "rgba(212,175,55,0.1)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.4)"; e.currentTarget.style.background = "transparent"; }}
+          >
+            Discord: jakiemarson
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
 
