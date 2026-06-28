@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Puplife – Premium Pup Gear"
+version = "1.0.0"
+id = "artifacts/puplife"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21632
+
+[services.development]
+run = "pnpm --filter @workspace/puplife run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/puplife", "run", "build" ]
+publicDir = "artifacts/puplife/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21632"
+BASE_PATH = "/"
