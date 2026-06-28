@@ -192,14 +192,6 @@ function Hero() {
           <p className="text-lg mb-8 leading-relaxed" style={{ color: "rgba(253,248,240,0.7)" }}>
             Handcrafted hoods, harnesses, collars, and accessories made for the human pup play community. Premium materials. Bold designs. Custom to your style.
           </p>
-          <div className="flex flex-wrap gap-8 mb-10">
-            {[{ val: "500+", label: "Orders Shipped" }, { val: "8+", label: "Colourways" }, { val: "100%", label: "Handcrafted" }].map((s) => (
-              <div key={s.label}>
-                <div className="text-3xl font-black" style={{ color: "#D4AF37" }}>{s.val}</div>
-                <div className="text-xs uppercase tracking-widest mt-1" style={{ color: "rgba(253,248,240,0.5)" }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
           <div className="flex flex-wrap gap-4">
             <a
               href="#products"
