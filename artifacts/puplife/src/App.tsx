@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function img(path: string) {
+  return `${BASE}/${path}`;
+}
+
 export default function App() {
   return (
-    <div className="min-h-screen bg-cream selection:bg-gold selection:text-white">
+    <div className="min-h-screen text-dark selection:bg-gold selection:text-white" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
       <Header />
       <main>
         <Hero />
@@ -21,65 +27,79 @@ export default function App() {
   );
 }
 
+/* ===================== HEADER ===================== */
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const links = [
+    { label: "Home", href: "#" },
+    { label: "Shop", href: "#products" },
+    { label: "About", href: "#about" },
+    { label: "Gallery", href: "#gallery" },
+    { label: "Custom", href: "#custom" },
+  ];
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all-custom ${
-        scrolled ? "py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" : "py-4 shadow-[0_2px_20px_rgba(0,0,0,0.06)]"
-      }`}
-      style={{ backgroundColor: "rgba(253, 248, 240, 0.95)", backdropFilter: "blur(10px)" }}
+      className="fixed top-0 left-0 w-full z-50"
+      style={{
+        backgroundColor: scrolled ? "rgba(15,10,5,0.97)" : "rgba(15,10,5,0.92)",
+        backdropFilter: "blur(14px)",
+        boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.5)" : "0 2px 12px rgba(0,0,0,0.3)",
+        transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+        borderBottom: "1px solid rgba(212,175,55,0.12)",
+      }}
     >
-      <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="flex items-center gap-2 text-2xl font-extrabold text-forest tracking-tight">
-          Puplife<span className="text-gold">.</span>
+      <div className="max-w-[1200px] mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo */}
+        <a href="#" className="flex items-center gap-2 text-2xl font-extrabold tracking-tight" style={{ color: "#FDF8F0" }}>
+          Pup<span style={{ color: "#D4AF37" }}>life</span><span style={{ color: "#D4AF37" }}>.</span>
         </a>
 
-        {/* Desktop Nav */}
+        {/* Desktop nav */}
         <nav className="hidden md:block">
-          <ul className="flex items-center gap-8 font-medium text-[15px]">
-            <li>
-              <a href="#" className="hover:text-forest transition-all-custom relative group">
-                Home
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            </li>
-            <li>
-              <a href="#products" className="hover:text-forest transition-all-custom relative group">
-                Shop
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            </li>
-            <li>
-              <a href="#about" className="hover:text-forest transition-all-custom relative group">
-                About
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            </li>
-            <li>
-              <a href="#gallery" className="hover:text-forest transition-all-custom relative group">
-                Gallery
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            </li>
-            <li>
-              <a href="#custom" className="hover:text-forest transition-all-custom relative group">
-                Custom
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            </li>
+          <ul className="flex items-center gap-8">
+            {links.map((l) => (
+              <li key={l.label}>
+                <a
+                  href={l.href}
+                  className="relative font-medium text-[15px] group"
+                  style={{ color: "rgba(253,248,240,0.85)", transition: "color 0.3s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#D4AF37")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(253,248,240,0.85)")}
+                >
+                  {l.label}
+                  <span
+                    className="absolute -bottom-1 left-0 h-[2px] w-0 group-hover:w-full"
+                    style={{ background: "#D4AF37", transition: "width 0.3s" }}
+                  />
+                </a>
+              </li>
+            ))}
             <li>
               <a
                 href="#contact"
-                className="bg-forest text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-forest transition-all-custom hover:-translate-y-0.5 inline-block"
+                className="px-6 py-2.5 rounded-full font-semibold text-[15px]"
+                style={{
+                  background: "#D4AF37",
+                  color: "#0F0A05",
+                  transition: "all 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#FDF8F0";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "#D4AF37";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
               >
                 Contact
               </a>
@@ -87,127 +107,219 @@ function Header() {
           </ul>
         </nav>
 
-        {/* Mobile Toggle */}
+        {/* Hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 z-50 relative"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden flex flex-col gap-1.5 cursor-pointer"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
         >
-          <span className={`w-7 h-[3px] bg-forest rounded-full transition-all duration-300 ${mobileMenuOpen ? "rotate-45 translate-y-[9px]" : ""}`}></span>
-          <span className={`w-7 h-[3px] bg-forest rounded-full transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : ""}`}></span>
-          <span className={`w-7 h-[3px] bg-forest rounded-full transition-all duration-300 ${mobileMenuOpen ? "-rotate-45 -translate-y-[9px]" : ""}`}></span>
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="block w-7 rounded-full"
+              style={{
+                height: "3px",
+                background: "#D4AF37",
+                transition: "all 0.3s",
+                transform:
+                  i === 0 && menuOpen ? "rotate(45deg) translate(6px,6px)" :
+                  i === 1 && menuOpen ? "scaleX(0)" :
+                  i === 2 && menuOpen ? "rotate(-45deg) translate(6px,-6px)" :
+                  "none",
+                opacity: i === 1 && menuOpen ? 0 : 1,
+              }}
+            />
+          ))}
         </button>
       </div>
 
-      {/* Mobile Nav */}
-      {mobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-cream shadow-normal border-t border-forest/10 p-6 flex flex-col gap-4 md:hidden font-medium text-lg text-center animate-in slide-in-from-top-4">
-          <a href="#" onClick={() => setMobileMenuOpen(false)}>Home</a>
-          <a href="#products" onClick={() => setMobileMenuOpen(false)}>Shop</a>
-          <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
-          <a href="#gallery" onClick={() => setMobileMenuOpen(false)}>Gallery</a>
-          <a href="#custom" onClick={() => setMobileMenuOpen(false)}>Custom</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="text-forest font-bold">Contact</a>
+      {/* Mobile menu */}
+      <div
+        style={{
+          maxHeight: menuOpen ? "400px" : "0",
+          overflow: "hidden",
+          transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1)",
+          background: "rgba(15,10,5,0.98)",
+          borderTop: menuOpen ? "1px solid rgba(212,175,55,0.15)" : "none",
+        }}
+      >
+        <div className="flex flex-col items-center gap-5 py-6 text-lg font-medium" style={{ color: "#FDF8F0" }}>
+          {links.map((l) => (
+            <a key={l.label} href={l.href} onClick={() => setMenuOpen(false)} style={{ color: "rgba(253,248,240,0.85)" }}>
+              {l.label}
+            </a>
+          ))}
+          <a href="#contact" onClick={() => setMenuOpen(false)} className="px-8 py-3 rounded-full font-semibold" style={{ background: "#D4AF37", color: "#0F0A05" }}>
+            Contact
+          </a>
         </div>
-      )}
+      </div>
     </header>
   );
 }
 
+/* ===================== HERO ===================== */
 function Hero() {
   return (
-    <section className="pt-36 pb-20 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, var(--cream), var(--white))" }}>
-      {/* Background decoration */}
-      <div 
-        className="absolute -top-[40%] -right-[20%] w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent 70%)" }}
-      />
-      
-      <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
-        <div className="max-w-xl">
-          <span className="inline-block bg-gold text-white px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-6">
-            Premium Pup Gear
+    <section
+      className="relative overflow-hidden"
+      style={{
+        paddingTop: "120px",
+        paddingBottom: "80px",
+        background: "#0F0A05",
+        backgroundImage: `
+          radial-gradient(ellipse 80% 60% at 60% 50%, rgba(212,175,55,0.07) 0%, transparent 70%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M0 0h60v60H0z' fill='%230F0A05'/%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(212,175,55,0.08)'/%3E%3Ccircle cx='0' cy='0' r='1' fill='rgba(212,175,55,0.06)'/%3E%3Ccircle cx='60' cy='60' r='1' fill='rgba(212,175,55,0.06)'/%3E%3C/svg%3E")
+        `,
+      }}
+    >
+      <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <div>
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-6"
+            style={{ background: "rgba(212,175,55,0.15)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)" }}
+          >
+            🐾 Premium Pup Play Gear
           </span>
-          <h1 className="text-5xl md:text-[52px] font-extrabold leading-[1.1] mb-6 text-dark">
-            Designed for <span className="text-gold relative">
-              Style & Comfort
-              <span className="absolute bottom-1 left-0 w-full h-2 bg-gold/20 rounded-full" />
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.05] mb-6" style={{ color: "#FDF8F0" }}>
+            Gear Crafted for the{" "}
+            <span className="relative inline-block" style={{ color: "#D4AF37" }}>
+              Pack
+              <span className="absolute bottom-1 left-0 w-full h-2 rounded-full" style={{ background: "rgba(212,175,55,0.2)" }} />
             </span>
           </h1>
-          <p className="text-lg text-brown mb-10">
-            Handcrafted premium collars, harnesses, and accessories for dogs who deserve the absolute best.
+          <p className="text-lg mb-10 leading-relaxed" style={{ color: "rgba(253,248,240,0.7)" }}>
+            Handcrafted hoods, harnesses, collars, and accessories made for the human pup play community. Premium materials. Bold designs. Custom to your style.
           </p>
           <div className="flex flex-wrap gap-4">
-            <a href="#products" className="bg-forest text-white border-2 border-forest px-8 py-4 rounded-full font-semibold transition-all-custom hover:bg-gold hover:border-gold hover:text-forest hover:-translate-y-1 shadow-normal hover:shadow-hover">
+            <a
+              href="#products"
+              className="inline-block px-8 py-4 rounded-full font-semibold"
+              style={{ background: "#D4AF37", color: "#0F0A05", transition: "all 0.3s", boxShadow: "0 8px 32px rgba(212,175,55,0.3)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#FDF8F0"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "#D4AF37"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
               Explore the Collection →
             </a>
-            <a href="#custom" className="bg-transparent text-forest border-2 border-forest px-8 py-4 rounded-full font-semibold transition-all-custom hover:bg-forest hover:text-white hover:-translate-y-1">
+            <a
+              href="#custom"
+              className="inline-block px-8 py-4 rounded-full font-semibold"
+              style={{ background: "transparent", color: "#FDF8F0", border: "2px solid rgba(253,248,240,0.4)", transition: "all 0.3s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#D4AF37"; e.currentTarget.style.color = "#D4AF37"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(253,248,240,0.4)"; e.currentTarget.style.color = "#FDF8F0"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
               Custom Orders
             </a>
           </div>
         </div>
-        
-        <div className="rounded-2xl overflow-hidden shadow-hover perspective-tilt transition-all-custom">
-          <img 
-            src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600&h=450&fit=crop" 
-            alt="Dog wearing premium gear" 
-            className="w-full h-[450px] object-cover"
-          />
+
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{
+            transform: "perspective(1000px) rotateY(-3deg)",
+            transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)",
+            boxShadow: "0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,175,55,0.15)",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "perspective(1000px) rotateY(0deg)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "perspective(1000px) rotateY(-3deg)")}
+        >
+          <img src={img("hood-purple-silver.jpeg")} alt="Premium Pup Hood – Purple & Silver" className="w-full object-cover" style={{ height: "480px" }} />
         </div>
       </div>
     </section>
   );
 }
 
+/* ===================== TRUST BAR ===================== */
 function TrustBar() {
+  const items = [
+    { icon: "✦", label: "100% Handcrafted" },
+    { icon: "◈", label: "Premium Neoprene & Leather" },
+    { icon: "✈", label: "Worldwide Shipping" },
+    { icon: "◉", label: "Custom Colourways" },
+  ];
   return (
-    <div className="bg-forest text-white py-8 px-6">
-      <div className="max-w-[1200px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-sm font-medium">
-        <div className="flex items-center justify-center gap-3"><span className="text-2xl">❤️</span> 100% Handcrafted</div>
-        <div className="flex items-center justify-center gap-3"><span className="text-2xl">⭐</span> Premium Quality</div>
-        <div className="flex items-center justify-center gap-3"><span className="text-2xl">📦</span> Free Shipping Worldwide</div>
-        <div className="flex items-center justify-center gap-3"><span className="text-2xl">🔄</span> Love It or Return It</div>
+    <div style={{ background: "#D4AF37", color: "#0F0A05", padding: "20px 24px" }}>
+      <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm font-bold uppercase tracking-wider">
+        {items.map((it) => (
+          <div key={it.label} className="flex items-center justify-center gap-2">
+            <span className="text-base">{it.icon}</span> {it.label}
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
-function FeaturedProducts() {
-  const products = [
-    {
-      img: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop",
-      name: "Classic Collar",
-      desc: "Handcrafted leather with gold hardware"
-    },
-    {
-      img: "https://images.unsplash.com/photo-1601758177381-33e976e84b45?w=400&h=300&fit=crop",
-      name: "Cozy Harness",
-      desc: "Breathable, lightweight, and stylish"
-    },
-    {
-      img: "https://images.unsplash.com/photo-1601758177296-6f1e0fea2a4a?w=400&h=300&fit=crop",
-      name: "Pup Bow Tie",
-      desc: "Perfect for special occasions"
-    }
-  ];
+/* ===================== FEATURED PRODUCTS ===================== */
+const PRODUCTS = [
+  {
+    img: "hood-red-gold.jpeg",
+    name: "Pup Hoods",
+    desc: "Full neoprene hoods with metal accents — available in 8+ bold colourways",
+    tag: "Bestseller",
+  },
+  {
+    img: "collar-red.jpeg",
+    name: "Pup Collars",
+    desc: "Wide padded collars with stainless steel hardware, built for style and safety",
+    tag: "Essential",
+  },
+  {
+    img: "harness-yellow.jpeg",
+    name: "Body Harnesses",
+    desc: "Adjustable full-body harnesses with D-rings and quick-release buckles",
+    tag: "Featured",
+  },
+  {
+    img: "paw-gloves.jpeg",
+    name: "Paw Mitts",
+    desc: "Plush faux-fur paw mitts with padded palms for hands-free play",
+    tag: "Popular",
+  },
+  {
+    img: "kneepads.jpeg",
+    name: "Knee Pads",
+    desc: "High-density foam knee pads wrapped in durable neoprene — stay protected",
+    tag: "Protective",
+  },
+  {
+    img: "collar-harness-set.jpeg",
+    name: "Collar + Harness Set",
+    desc: "Matching collar and harness sets — the complete pup play starter kit",
+    tag: "Set",
+  },
+];
 
+function FeaturedProducts() {
   return (
-    <section id="products" className="py-20 bg-white px-6">
+    <section
+      id="products"
+      style={{
+        padding: "100px 24px",
+        background: "#100C06",
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23100C06'/%3E%3Cpath d='M0 20h40M20 0v40' stroke='rgba(212,175,55,0.05)' stroke-width='0.5'/%3E%3C/svg%3E")`,
+      }}
+    >
       <div className="max-w-[1200px] mx-auto">
-        <div className="text-center mb-12">
-          <span className="inline-block bg-cream text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">Collection</span>
-          <h2 className="text-4xl font-bold mb-3 text-dark">Featured <span className="text-gold">Pup Gear</span></h2>
-          <p className="text-lg text-brown max-w-2xl mx-auto">Designed for style, made for comfort.</p>
+        <div className="text-center mb-14">
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            The Collection
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: "#FDF8F0" }}>
+            Premium <span style={{ color: "#D4AF37" }}>Pup Gear</span>
+          </h2>
+          <p className="text-lg max-w-xl mx-auto" style={{ color: "rgba(253,248,240,0.6)" }}>
+            Every piece is designed for the human pup play community — bold, durable, and built to perform.
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          {products.map((p, i) => (
-            <div key={i} className="bg-cream rounded-2xl overflow-hidden border border-gold/15 transition-all-custom hover:-translate-y-2 hover:shadow-hover hover:border-gold">
-              <img src={p.img} alt={p.name} className="w-full h-[300px] object-cover" />
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-bold mb-1 text-dark">{p.name}</h3>
-                <p className="text-sm text-brown">{p.desc}</p>
-              </div>
-            </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          {PRODUCTS.map((p, i) => (
+            <ProductCard key={i} {...p} />
           ))}
         </div>
       </div>
@@ -215,24 +327,101 @@ function FeaturedProducts() {
   );
 }
 
+function ProductCard({ img: imgPath, name, desc, tag }: { img: string; name: string; desc: string; tag: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: "#1A1208",
+        borderRadius: "16px",
+        overflow: "hidden",
+        border: hovered ? "1px solid rgba(212,175,55,0.5)" : "1px solid rgba(212,175,55,0.1)",
+        transform: hovered ? "translateY(-8px)" : "translateY(0)",
+        boxShadow: hovered ? "0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,175,55,0.2)" : "0 4px 20px rgba(0,0,0,0.4)",
+        transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+      }}
+    >
+      <div className="relative overflow-hidden" style={{ height: "280px" }}>
+        <img
+          src={img(imgPath)}
+          alt={name}
+          className="w-full h-full object-cover"
+          style={{ transform: hovered ? "scale(1.05)" : "scale(1)", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)" }}
+        />
+        <span
+          className="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider"
+          style={{ background: "#D4AF37", color: "#0F0A05" }}
+        >
+          {tag}
+        </span>
+      </div>
+      <div className="p-6 text-center">
+        <h3 className="text-xl font-bold mb-2" style={{ color: "#FDF8F0" }}>{name}</h3>
+        <p className="text-sm leading-relaxed" style={{ color: "rgba(253,248,240,0.6)" }}>{desc}</p>
+        <a
+          href="#custom"
+          className="inline-block mt-5 px-6 py-2.5 rounded-full text-sm font-semibold"
+          style={{
+            background: hovered ? "#D4AF37" : "transparent",
+            color: hovered ? "#0F0A05" : "#D4AF37",
+            border: "1px solid rgba(212,175,55,0.5)",
+            transition: "all 0.3s",
+          }}
+        >
+          Order Now
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== ABOUT ===================== */
 function About() {
   return (
-    <section id="about" className="py-20 bg-cream px-6">
+    <section
+      id="about"
+      style={{
+        padding: "100px 24px",
+        background: "#0F0A05",
+        backgroundImage: `
+          radial-gradient(ellipse 60% 80% at 10% 50%, rgba(212,175,55,0.05) 0%, transparent 70%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='none'/%3E%3Ccircle cx='30' cy='30' r='0.8' fill='rgba(212,175,55,0.07)'/%3E%3C/svg%3E")
+        `,
+      }}
+    >
       <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-center">
-        <div className="rounded-2xl overflow-hidden shadow-normal">
-          <img src="https://images.unsplash.com/photo-1601758177296-6f1e0fea2a4a?w=600&h=400&fit=crop" alt="Our Story" className="w-full h-[400px] object-cover" />
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.1)" }}
+        >
+          <img src={img("collar-harness-set.jpeg")} alt="Collar and Harness Set" className="w-full object-cover" style={{ height: "440px" }} />
         </div>
         <div>
-          <span className="inline-block bg-white text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">Our Story</span>
-          <h2 className="text-4xl font-bold mb-5 text-dark">Creating Gear <span className="text-gold">with Love</span></h2>
-          <p className="text-[17px] text-brown mb-4">
-            Puplife was born out of a simple desire: to give our dogs accessories that look as good as they feel. We were tired of generic, uncomfortable pet store gear.
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-5"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            Our Story
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight" style={{ color: "#FDF8F0" }}>
+            Built for the <span style={{ color: "#D4AF37" }}>Community</span>
+          </h2>
+          <p className="text-[17px] leading-relaxed mb-5" style={{ color: "rgba(253,248,240,0.7)" }}>
+            Puplife was created by and for the human pup play community. We design and handcraft every piece of gear with the pup in mind — durable enough for play, expressive enough to represent your identity.
           </p>
-          <p className="text-[17px] text-brown mb-8">
-            Every piece we create is handcrafted with care using premium materials. We believe every pup deserves to stand out while staying comfortable on every walk.
+          <p className="text-[17px] leading-relaxed mb-8" style={{ color: "rgba(253,248,240,0.7)" }}>
+            From custom colourway hoods to matching collar and harness sets, every item starts with your vision. We make it real with premium neoprene, leather, and stainless steel hardware.
           </p>
-          <a href="#custom" className="text-forest font-bold hover:text-gold transition-colors inline-flex items-center gap-2">
-            Custom Orders →
+          <a
+            href="#custom"
+            className="inline-block px-8 py-4 rounded-full font-semibold"
+            style={{ background: "#D4AF37", color: "#0F0A05", transition: "all 0.3s", boxShadow: "0 8px 24px rgba(212,175,55,0.3)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 40px rgba(212,175,55,0.4)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(212,175,55,0.3)"; }}
+          >
+            Start a Custom Order →
           </a>
         </div>
       </div>
@@ -240,30 +429,39 @@ function About() {
   );
 }
 
-function Process() {
-  const steps = [
-    { num: "01", title: "Design", desc: "We sketch and plan every detail for maximum comfort and style." },
-    { num: "02", title: "Handcraft", desc: "Expert artisans bring the designs to life using premium materials." },
-    { num: "03", title: "Quality Check", desc: "Every item is rigorously tested for durability and finish." },
-    { num: "04", title: "Delivered", desc: "Packed with love and shipped worldwide to your doorstep." }
-  ];
+/* ===================== PROCESS ===================== */
+const STEPS = [
+  { num: "01", title: "Choose Your Style", desc: "Pick your hood type, collar width, harness style, and colourway from our options." },
+  { num: "02", title: "We Handcraft It", desc: "Skilled artisans cut, stitch, and assemble each piece from premium neoprene and leather." },
+  { num: "03", title: "Quality Checked", desc: "Every seam, buckle, and snap is inspected before it leaves our workshop." },
+  { num: "04", title: "Shipped to You", desc: "Discreetly packed and shipped worldwide — fast, safe, and tracked." },
+];
 
+function Process() {
   return (
-    <section className="py-20 bg-white px-6">
+    <section
+      style={{
+        padding: "100px 24px",
+        background: "#130E07",
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='none'/%3E%3Cpath d='M0 40h80M40 0v80' stroke='rgba(212,175,55,0.04)' stroke-width='1'/%3E%3Ccircle cx='40' cy='40' r='1.5' fill='rgba(212,175,55,0.06)'/%3E%3C/svg%3E")`,
+      }}
+    >
       <div className="max-w-[1200px] mx-auto">
-        <div className="text-center mb-12">
-          <span className="inline-block bg-cream text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">How It Works</span>
-          <h2 className="text-4xl font-bold mb-3 text-dark">Our Process</h2>
-          <p className="text-lg text-brown">From design to your doorstep.</p>
+        <div className="text-center mb-14">
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            How It Works
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold" style={{ color: "#FDF8F0" }}>
+            Our <span style={{ color: "#D4AF37" }}>Process</span>
+          </h2>
         </div>
-        
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((s, i) => (
-            <div key={i} className="text-center p-8 bg-cream rounded-2xl border border-gray-100 transition-all-custom hover:border-gold hover:shadow-normal hover:-translate-y-1">
-              <div className="w-12 h-12 bg-forest text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">{s.num}</div>
-              <h3 className="text-lg font-bold mb-2 text-dark">{s.title}</h3>
-              <p className="text-sm text-brown">{s.desc}</p>
-            </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7">
+          {STEPS.map((s, i) => (
+            <StepCard key={i} {...s} />
           ))}
         </div>
       </div>
@@ -271,19 +469,73 @@ function Process() {
   );
 }
 
+function StepCard({ num, title, desc }: { num: string; title: string; desc: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="text-center p-8 rounded-2xl"
+      style={{
+        background: "#1A1208",
+        border: hovered ? "1px solid rgba(212,175,55,0.5)" : "1px solid rgba(212,175,55,0.08)",
+        transform: hovered ? "translateY(-6px)" : "translateY(0)",
+        boxShadow: hovered ? "0 20px 50px rgba(0,0,0,0.5)" : "none",
+        transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+      }}
+    >
+      <div
+        className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-5"
+        style={{ background: "#D4AF37", color: "#0F0A05" }}
+      >
+        {num}
+      </div>
+      <h3 className="text-lg font-bold mb-3" style={{ color: "#FDF8F0" }}>{title}</h3>
+      <p className="text-sm leading-relaxed" style={{ color: "rgba(253,248,240,0.6)" }}>{desc}</p>
+    </div>
+  );
+}
+
+/* ===================== CUSTOM ORDERS ===================== */
 function CustomOrders() {
   return (
-    <section id="custom" className="py-20 bg-cream px-6">
-      <div className="max-w-[700px] mx-auto text-center bg-white p-12 rounded-2xl shadow-normal border border-gold/15">
-        <span className="inline-block bg-cream text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">Custom Orders</span>
-        <h2 className="text-4xl font-bold mb-4 text-dark">Design Your <span className="text-gold">Own</span></h2>
-        <p className="text-[17px] text-brown mb-4">
-          Want something truly unique? We take a limited number of custom orders each month. Choose your leather, hardware color, and custom sizing.
+    <section
+      id="custom"
+      style={{
+        padding: "100px 24px",
+        background: "#0F0A05",
+      }}
+    >
+      <div
+        className="max-w-[720px] mx-auto text-center p-14 rounded-2xl"
+        style={{
+          background: "linear-gradient(135deg, #1A1208, #221605)",
+          border: "1px solid rgba(212,175,55,0.25)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(212,175,55,0.1)",
+        }}
+      >
+        <span
+          className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-5"
+          style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)" }}
+        >
+          Custom Orders
+        </span>
+        <h2 className="text-4xl font-bold mb-5" style={{ color: "#FDF8F0" }}>
+          Design Your <span style={{ color: "#D4AF37" }}>Own Gear</span>
+        </h2>
+        <p className="text-[17px] leading-relaxed mb-4" style={{ color: "rgba(253,248,240,0.7)" }}>
+          Want a specific colourway, sizing, or combination that isn't in the shop? We take custom orders every month. Pick your hood style, choose your colours, and we'll handcraft it exclusively for you.
         </p>
-        <p className="text-[17px] text-brown mb-8">
-          Let's create something special just for your best friend.
+        <p className="text-[17px] mb-8" style={{ color: "rgba(253,248,240,0.7)" }}>
+          <strong style={{ color: "#D4AF37" }}>Let's build something just for you.</strong>
         </p>
-        <a href="mailto:jakiemarson104@gmail.com" className="inline-block bg-forest text-white px-8 py-4 rounded-full font-semibold transition-all-custom hover:bg-gold hover:text-forest shadow-normal">
+        <a
+          href="mailto:jakiemarson104@gmail.com"
+          className="inline-block px-10 py-4 rounded-full font-semibold text-[17px]"
+          style={{ background: "#D4AF37", color: "#0F0A05", transition: "all 0.3s", boxShadow: "0 8px 32px rgba(212,175,55,0.35)" }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(212,175,55,0.5)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(212,175,55,0.35)"; }}
+        >
           Start Your Custom Order →
         </a>
       </div>
@@ -291,70 +543,137 @@ function CustomOrders() {
   );
 }
 
+/* ===================== TESTIMONIALS ===================== */
 function Testimonials() {
   const reviews = [
     {
-      quote: "The craftsmanship is incredible! My pup has never looked so stylish. The custom collar fits perfectly and the leather is incredibly soft. Worth every penny.",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-      name: "Sarah J.",
-      role: "Proud Pup Parent"
+      quote: "The custom hood I ordered is absolutely incredible. The neoprene is top quality and the colours are exactly what I wanted. Got so many compliments at my first mosh!",
+      name: "Alex M.",
+      role: "Pup Alpha",
     },
     {
-      quote: "Finally found a harness that is both beautiful and functional. It doesn't restrict his movement at all. We get compliments on every single walk!",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-      name: "Michael R.",
-      role: "Dog Dad"
-    }
+      quote: "Best harness I've owned. The stitching is immaculate and it fits perfectly even with my custom measurements. Fast shipping too — would recommend to the whole pack.",
+      name: "Jamie R.",
+      role: "Pup Enthusiast",
+    },
   ];
 
   return (
-    <section className="py-20 bg-white px-6">
+    <section
+      style={{
+        padding: "100px 24px",
+        background: "#130E07",
+      }}
+    >
       <div className="max-w-[1200px] mx-auto">
-        <div className="text-center mb-12">
-          <span className="inline-block bg-cream text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">Love Notes</span>
-          <h2 className="text-4xl font-bold text-dark">Happy Pups & Owners</h2>
+        <div className="text-center mb-14">
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            Love Notes
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold" style={{ color: "#FDF8F0" }}>
+            Happy <span style={{ color: "#D4AF37" }}>Customers</span>
+          </h2>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-8">
           {reviews.map((r, i) => (
-            <div key={i} className="bg-cream p-10 rounded-2xl border border-gold/10 shadow-normal transition-all-custom hover:-translate-y-1 hover:shadow-hover">
-              <div className="text-gold text-xl mb-3">⭐⭐⭐⭐⭐</div>
-              <p className="text-[17px] italic text-brown mb-6">"{r.quote}"</p>
-              <div className="flex items-center gap-4">
-                <img src={r.avatar} alt={r.name} className="w-14 h-14 rounded-full object-cover border-2 border-gold" />
-                <div>
-                  <h4 className="font-bold text-dark">{r.name}</h4>
-                  <span className="text-sm text-brown">{r.role}</span>
-                </div>
-              </div>
-            </div>
+            <TestimonialCard key={i} {...r} />
           ))}
         </div>
       </div>
     </section>
   );
 }
+
+function TestimonialCard({ quote, name, role }: { quote: string; name: string; role: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="p-10 rounded-2xl"
+      style={{
+        background: "#1A1208",
+        border: hovered ? "1px solid rgba(212,175,55,0.4)" : "1px solid rgba(212,175,55,0.1)",
+        transform: hovered ? "translateY(-6px)" : "translateY(0)",
+        boxShadow: hovered ? "0 24px 60px rgba(0,0,0,0.5)" : "0 4px 20px rgba(0,0,0,0.3)",
+        transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+      }}
+    >
+      <div className="text-xl mb-4" style={{ color: "#D4AF37" }}>⭐⭐⭐⭐⭐</div>
+      <p className="text-[17px] italic leading-relaxed mb-8" style={{ color: "rgba(253,248,240,0.75)" }}>
+        "{quote}"
+      </p>
+      <div className="flex items-center gap-4">
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-black"
+          style={{ background: "#D4AF37", color: "#0F0A05" }}
+        >
+          {name[0]}
+        </div>
+        <div>
+          <h4 className="font-bold" style={{ color: "#FDF8F0" }}>{name}</h4>
+          <span className="text-sm" style={{ color: "rgba(212,175,55,0.8)" }}>{role}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== GALLERY ===================== */
+const GALLERY = [
+  { src: "hood-purple-silver.jpeg", alt: "Purple & Silver Hood" },
+  { src: "hood-brown-green.jpeg", alt: "Brown & Green Distressed Hood" },
+  { src: "hood-neon-green.jpeg", alt: "Neon Cyber Hood" },
+  { src: "hood-blue-black.jpeg", alt: "Blue & Black Hood" },
+  { src: "collar-red.jpeg", alt: "Red Padded Collar" },
+  { src: "harness-black-red.jpeg", alt: "Black & Red Harness" },
+  { src: "paw-gloves.jpeg", alt: "Faux Fur Paw Mitts" },
+  { src: "hood-red-black.jpeg", alt: "Red & Black Hood" },
+];
 
 function Gallery() {
-  const images = [
-    "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop",
-    "https://images.unsplash.com/photo-1601758177381-33e976e84b45?w=400&h=300&fit=crop",
-    "https://images.unsplash.com/photo-1601758177296-6f1e0fea2a4a?w=400&h=300&fit=crop",
-    "https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?w=400&h=300&fit=crop" // using an extra dog one for the 4th
-  ];
+  const [active, setActive] = useState<string | null>(null);
 
   return (
-    <section id="gallery" className="py-20 bg-cream px-6">
+    <section
+      id="gallery"
+      style={{
+        padding: "100px 24px",
+        background: "#100C06",
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23100C06'/%3E%3Cpath d='M0 20h40M20 0v40' stroke='rgba(212,175,55,0.04)' stroke-width='0.5'/%3E%3C/svg%3E")`,
+      }}
+    >
       <div className="max-w-[1200px] mx-auto">
-        <div className="text-center mb-12">
-          <span className="inline-block bg-white text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">Lookbook</span>
-          <h2 className="text-4xl font-bold text-dark">Style Gallery</h2>
+        <div className="text-center mb-14">
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            Lookbook
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold" style={{ color: "#FDF8F0" }}>
+            Style <span style={{ color: "#D4AF37" }}>Gallery</span>
+          </h2>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {images.map((src, i) => (
-            <div key={i} className="rounded-2xl overflow-hidden transition-all-custom hover:scale-[1.03] hover:shadow-hover">
-              <img src={src} alt="Gallery item" className="w-full h-[250px] object-cover" />
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {GALLERY.map((g, i) => (
+            <div
+              key={i}
+              className="rounded-xl overflow-hidden cursor-pointer"
+              style={{
+                transform: active === g.src ? "scale(1.04)" : "scale(1)",
+                boxShadow: active === g.src ? "0 16px 48px rgba(0,0,0,0.6), 0 0 0 2px rgba(212,175,55,0.5)" : "0 4px 16px rgba(0,0,0,0.4)",
+                transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+              }}
+              onMouseEnter={() => setActive(g.src)}
+              onMouseLeave={() => setActive(null)}
+            >
+              <img src={img(g.src)} alt={g.alt} className="w-full object-cover" style={{ height: "220px" }} />
             </div>
           ))}
         </div>
@@ -363,40 +682,75 @@ function Gallery() {
   );
 }
 
-function FAQ() {
-  const faqs = [
-    { q: "What materials do you use?", a: "We use premium leather, breathable fabrics, and durable hardware to ensure comfort and longevity." },
-    { q: "How do I measure my pup?", a: "We provide a simple measuring guide with every order. Just follow the instructions for a perfect fit." },
-    { q: "Can I customize an order?", a: "Absolutely! We offer custom designs, colors, and personalization options. Contact us to discuss your vision." },
-    { q: "What's your return policy?", a: "We stand behind our quality. If you're not completely satisfied, we'll work with you to make it right." }
-  ];
+/* ===================== FAQ ===================== */
+const FAQS = [
+  { q: "What materials do you use?", a: "We use premium neoprene, genuine and synthetic leather, and stainless steel hardware. All materials are skin-safe, durable, and built for active use." },
+  { q: "How do I measure for a custom hood or collar?", a: "We'll email you a simple measuring guide after you contact us. Just a tape measure and two measurements — that's it." },
+  { q: "Can I choose my own colourway?", a: "Absolutely. Custom colourways are our speciality. Send us your ideas and we'll work with you to design the perfect combination." },
+  { q: "Do you ship discreetly?", a: "Yes, always. All orders are shipped in plain, unmarked packaging with no indication of the contents on the outside." },
+  { q: "What's your turnaround time on custom orders?", a: "Custom pieces typically take 2–4 weeks depending on complexity and current order volume. We'll give you a realistic timeline upfront." },
+  { q: "What's your return policy?", a: "If something isn't right, reach out within 14 days. We'll work with you to fix it — we stand behind every piece we make." },
+];
 
+function FAQ() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
   return (
-    <section className="py-20 bg-white px-6">
+    <section
+      style={{ padding: "100px 24px", background: "#0F0A05" }}
+    >
       <div className="max-w-[1200px] mx-auto">
-        <div className="text-center mb-12">
-          <span className="inline-block bg-cream text-forest px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-wide mb-3">FAQ</span>
-          <h2 className="text-4xl font-bold text-dark">Common Questions</h2>
+        <div className="text-center mb-14">
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            FAQ
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold" style={{ color: "#FDF8F0" }}>
+            Common <span style={{ color: "#D4AF37" }}>Questions</span>
+          </h2>
         </div>
-        
-        <div className="grid md:grid-cols-2 gap-8">
-          {faqs.map((faq, i) => {
-            const isOpen = openIdx === i;
+
+        <div className="grid md:grid-cols-2 gap-4 max-w-[1000px] mx-auto">
+          {FAQS.map((faq, i) => {
+            const open = openIdx === i;
             return (
-              <div 
-                key={i} 
-                className={`bg-cream p-6 rounded-2xl cursor-pointer transition-all-custom border ${isOpen ? 'border-gold' : 'border-transparent hover:border-gold/50'}`}
-                onClick={() => setOpenIdx(isOpen ? null : i)}
+              <div
+                key={i}
+                className="rounded-xl cursor-pointer p-6"
+                style={{
+                  background: "#1A1208",
+                  border: open ? "1px solid rgba(212,175,55,0.5)" : "1px solid rgba(212,175,55,0.08)",
+                  transition: "all 0.3s",
+                }}
+                onClick={() => setOpenIdx(open ? null : i)}
               >
-                <div className="flex justify-between items-center font-bold text-[17px] text-dark">
-                  {faq.q}
-                  <span className={`text-2xl text-gold transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}>+</span>
+                <div className="flex justify-between items-center" style={{ color: "#FDF8F0" }}>
+                  <span className="font-bold text-[16px] pr-4">{faq.q}</span>
+                  <span
+                    className="text-2xl flex-shrink-0 font-light"
+                    style={{
+                      color: "#D4AF37",
+                      transform: open ? "rotate(45deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s",
+                      lineHeight: 1,
+                    }}
+                  >
+                    +
+                  </span>
                 </div>
-                <div 
-                  className={`overflow-hidden transition-all duration-300 text-brown`}
-                  style={{ maxHeight: isOpen ? '200px' : '0', opacity: isOpen ? 1 : 0, marginTop: isOpen ? '12px' : '0' }}
+                <div
+                  style={{
+                    maxHeight: open ? "200px" : "0",
+                    overflow: "hidden",
+                    opacity: open ? 1 : 0,
+                    marginTop: open ? "12px" : "0",
+                    transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)",
+                    color: "rgba(253,248,240,0.65)",
+                    fontSize: "15px",
+                    lineHeight: "1.7",
+                  }}
                 >
                   {faq.a}
                 </div>
@@ -409,18 +763,40 @@ function FAQ() {
   );
 }
 
+/* ===================== CTA ===================== */
 function CTASection() {
   return (
-    <section id="contact" className="py-20 bg-forest text-white text-center relative overflow-hidden px-6">
-      <div 
-        className="absolute -top-[50%] -right-[20%] w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 70%)" }}
+    <section
+      id="contact"
+      className="text-center relative overflow-hidden"
+      style={{
+        padding: "100px 24px",
+        background: "linear-gradient(135deg, #1A1208, #100C06)",
+        borderTop: "1px solid rgba(212,175,55,0.15)",
+      }}
+    >
+      <div
+        className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(212,175,55,0.08), transparent 65%)" }}
       />
-      
+      <div
+        className="absolute -bottom-1/2 -left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(212,175,55,0.05), transparent 65%)" }}
+      />
       <div className="max-w-2xl mx-auto relative z-10">
-        <h2 className="text-4xl font-bold mb-4">Ready to Style Your Pup?</h2>
-        <p className="text-lg opacity-90 mb-8">Reach out for questions, sizing help, or to start your custom order.</p>
-        <a href="mailto:jakiemarson104@gmail.com" className="inline-block bg-gold text-forest border-2 border-gold px-8 py-4 rounded-full font-semibold transition-all-custom hover:bg-cream hover:border-cream shadow-normal hover:shadow-hover">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-5" style={{ color: "#FDF8F0" }}>
+          Ready to Join the <span style={{ color: "#D4AF37" }}>Pack?</span>
+        </h2>
+        <p className="text-lg mb-10" style={{ color: "rgba(253,248,240,0.7)" }}>
+          Browse the collection, ask questions, or start designing your custom gear today.
+        </p>
+        <a
+          href="mailto:jakiemarson104@gmail.com"
+          className="inline-block px-12 py-5 rounded-full font-bold text-lg"
+          style={{ background: "#D4AF37", color: "#0F0A05", transition: "all 0.3s", boxShadow: "0 12px 40px rgba(212,175,55,0.4)" }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 20px 60px rgba(212,175,55,0.55)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(212,175,55,0.4)"; }}
+        >
           Get in Touch →
         </a>
       </div>
@@ -428,44 +804,65 @@ function CTASection() {
   );
 }
 
+/* ===================== FOOTER ===================== */
 function Footer() {
   return (
-    <footer className="bg-dark text-white pt-16 pb-8 px-6">
+    <footer style={{ background: "#080501", color: "#FDF8F0", padding: "64px 24px 32px", borderTop: "1px solid rgba(212,175,55,0.1)" }}>
       <div className="max-w-[1200px] mx-auto">
-        <div className="grid md:grid-cols-4 gap-10 mb-10">
-          <div className="md:col-span-2">
-            <h3 className="text-2xl font-extrabold tracking-tight mb-3">Puplife<span className="text-gold">.</span></h3>
-            <p className="text-[15px] opacity-80 max-w-[300px]">
-              Handcrafted premium gear for pups who deserve the absolute best. Designed for style, made for comfort.
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
+          <div>
+            <h3 className="text-2xl font-extrabold tracking-tight mb-4">
+              Pup<span style={{ color: "#D4AF37" }}>life</span><span style={{ color: "#D4AF37" }}>.</span>
+            </h3>
+            <p className="text-[15px] max-w-[280px] leading-relaxed" style={{ color: "rgba(253,248,240,0.6)" }}>
+              Premium human pup play gear — handcrafted with pride for the pack.
             </p>
           </div>
-          
+
           <div>
-            <h4 className="text-lg font-bold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-[15px]">
-              <li><a href="#products" className="opacity-80 hover:opacity-100 hover:text-gold transition-colors">Shop Collection</a></li>
-              <li><a href="#about" className="opacity-80 hover:opacity-100 hover:text-gold transition-colors">Our Story</a></li>
-              <li><a href="#custom" className="opacity-80 hover:opacity-100 hover:text-gold transition-colors">Custom Orders</a></li>
-              <li><a href="#gallery" className="opacity-80 hover:opacity-100 hover:text-gold transition-colors">Style Gallery</a></li>
+            <h4 className="font-bold text-lg mb-5" style={{ color: "#D4AF37" }}>Quick Links</h4>
+            <ul className="space-y-3 text-[15px]">
+              {[
+                { label: "Shop Collection", href: "#products" },
+                { label: "Our Story", href: "#about" },
+                { label: "Custom Orders", href: "#custom" },
+                { label: "Style Gallery", href: "#gallery" },
+                { label: "FAQ", href: "#faq" },
+              ].map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    style={{ color: "rgba(253,248,240,0.65)", transition: "color 0.2s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#D4AF37")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(253,248,240,0.65)")}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
-          
+
           <div>
-            <h4 className="text-lg font-bold mb-4">Get In Touch</h4>
-            <div className="space-y-2 text-[15px] mb-6">
-              <a href="mailto:jakiemarson104@gmail.com" className="block opacity-80 hover:opacity-100 hover:text-gold transition-colors">jakiemarson104@gmail.com</a>
-              <p className="opacity-80">Discord: jakiemarson</p>
-            </div>
-            <div className="flex gap-4">
-              <a href="#" className="text-2xl opacity-80 hover:opacity-100 hover:text-gold hover:-translate-y-0.5 transition-all">📷</a>
-              <a href="#" className="text-2xl opacity-80 hover:opacity-100 hover:text-gold hover:-translate-y-0.5 transition-all">🐦</a>
-              <a href="#" className="text-2xl opacity-80 hover:opacity-100 hover:text-gold hover:-translate-y-0.5 transition-all">💼</a>
-              <a href="#" className="text-2xl opacity-80 hover:opacity-100 hover:text-gold hover:-translate-y-0.5 transition-all">▶️</a>
+            <h4 className="font-bold text-lg mb-5" style={{ color: "#D4AF37" }}>Get In Touch</h4>
+            <div className="space-y-3 text-[15px]" style={{ color: "rgba(253,248,240,0.65)" }}>
+              <a
+                href="mailto:jakiemarson104@gmail.com"
+                style={{ display: "block", color: "rgba(253,248,240,0.65)", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#D4AF37")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(253,248,240,0.65)")}
+              >
+                jakiemarson104@gmail.com
+              </a>
+              <p>Discord: <strong style={{ color: "rgba(253,248,240,0.9)" }}>jakiemarson</strong></p>
             </div>
           </div>
         </div>
-        
-        <div className="border-t border-white/10 pt-6 text-center text-sm opacity-60">
+
+        <div
+          className="text-center text-sm"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "24px", color: "rgba(253,248,240,0.4)" }}
+        >
           © 2025 Puplife. All Rights Reserved.
         </div>
       </div>
