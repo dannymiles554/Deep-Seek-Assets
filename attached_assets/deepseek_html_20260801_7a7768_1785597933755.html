@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PupCostumes · Furry Commission</title>
+
+    <!-- Font Awesome 6 (free) for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: #faf7f2;
+            color: #2d2a24;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        .brand {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .brand h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #d48c5c, #b45f3a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand p {
+            font-size: 1.2rem;
+            color: #5e4d3c;
+            max-width: 600px;
+            margin: 0.5rem auto 0;
+        }
+
+        .brand .tagline {
+            display: inline-block;
+            background: #ede7df;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4d3e2e;
+            letter-spacing: 0.3px;
+            margin-top: 0.5rem;
+        }
+
+        /* ---------- PACKAGE CARDS ---------- */
+        .packages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 3rem 0 4rem;
+        }
+
+        .card {
+            flex: 1 1 280px;
+            max-width: 340px;
+            background: #ffffff;
+            border-radius: 2rem;
+            padding: 2rem 1.8rem 2.2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #f0ebe3;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.08);
+        }
+
+        .card.basic {
+            border-top: 6px solid #b0a28f;
+        }
+        .card.regular {
+            border-top: 6px solid #d48c5c;
+        }
+        .card.premium {
+            border-top: 6px solid #a8623a;
+        }
+
+        .card .plan-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.25rem;
+        }
+
+        .card .plan-price {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #2d2a24;
+            margin: 0.25rem 0 0.5rem;
+        }
+
+        .card .plan-price small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #7a6a58;
+        }
+
+        .card .divider {
+            width: 40px;
+            height: 3px;
+            background: #ddd6cc;
+            border-radius: 4px;
+            margin: 0.8rem 0 1.2rem;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-bottom: 1.8rem;
+            flex: 1;
+        }
+
+        .card ul li {
+            padding: 0.35rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.98rem;
+            color: #3d352b;
+        }
+
+        .card ul li i {
+            color: #b48b6a;
+            width: 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .card .sample-tag {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #7a6a58;
+            margin-top: 0.5rem;
+        }
+
+        /* ----- sample grid with images ----- */
+        .card .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+            margin: 0.6rem 0 1.2rem;
+        }
+
+        .card .sample-grid .sample-item {
+            background: #f3efe9;
+            border-radius: 12px;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            border: 1px solid #e6dfd6;
+            position: relative;
+        }
+
+        .card .sample-grid .sample-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card .sample-grid .sample-item span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(45, 42, 36, 0.7);
+            color: #faf7f2;
+            font-size: 0.6rem;
+            padding: 0.2rem 0;
+            text-align: center;
+            font-weight: 500;
+            backdrop-filter: blur(2px);
+            letter-spacing: 0.3px;
+        }
+
+        .card .btn-cta {
+            background: #2d2a24;
+            color: #faf7f2;
+            border: none;
+            padding: 0.9rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .card .btn-cta:hover {
+            background: #4d3e2e;
+        }
+
+        .card .btn-cta:active {
+            transform: scale(0.97);
+        }
+
+        .card .btn-cta i {
+            font-size: 1rem;
+        }
+
+        /* ---------- SOCIAL SECTION ---------- */
+        .social-section {
+            text-align: center;
+            margin: 3rem 0 1.5rem;
+            padding: 2rem 1.5rem;
+            background: #ffffff;
+            border-radius: 3rem;
+            border: 1px solid #f0ebe3;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .social-section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .social-section .sub {
+            color: #7a6a58;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2rem 2.5rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: #2d2a24;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            background: #f6f2ec;
+            transition: background 0.2s, transform 0.1s;
+            border: 1px solid #e6dfd6;
+        }
+
+        .social-links a i {
+            font-size: 1.4rem;
+            width: 1.8rem;
+            text-align: center;
+            color: #b48b6a;
+        }
+
+        .social-links a:hover {
+            background: #ede7df;
+            transform: scale(1.02);
+        }
+
+        .social-links a .handle {
+            font-weight: 400;
+            color: #5e4d3c;
+        }
+
+        /* ---------- FOOTER ---------- */
+        .footer {
+            text-align: center;
+            margin-top: 3.5rem;
+            font-size: 0.9rem;
+            color: #9a8a78;
+            border-top: 1px solid #ede7df;
+            padding-top: 2rem;
+        }
+
+        .footer i {
+            color: #c27a5a;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 700px) {
+            .brand h1 {
+                font-size: 2.2rem;
+            }
+
+            .packages {
+                gap: 1.5rem;
+            }
+
+            .card {
+                flex: 1 1 100%;
+                max-width: 400px;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.8rem;
+            }
+
+            .social-links a {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card .sample-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- ====== BRAND HEADER ====== -->
+        <header class="brand">
+            <h1>🐾 PupCostumes</h1>
+            <p>Custom fursuit &amp; pup hood commissions — made with love for the furry community.</p>
+            <span class="tagline"><i class="fas fa-paw" style="margin-right:6px;"></i> accepting orders now</span>
+        </header>
+
+        <!-- ====== PACKAGE CARDS ====== -->
+        <div class="packages">
+
+            <!-- BASIC -->
+            <div class="card basic">
+                <div class="plan-name">Basic</div>
+                <div class="plan-price">$250 <small>USD</small></div>
+                <div class="divider"></div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Standard pup hood (one colour)</li>
+                    <li><i class="fas fa-check-circle"></i> Eye mesh &amp; ventilation</li>
+                    <li><i class="fas fa-check-circle"></i> Adjustable straps</li>
+                    <li><i class="fas fa-check-circle"></i> 2–3 week turnaround</li>
+                </ul>
+                <div class="sample-tag"><i class="fas fa-images"></i> sample gallery</div>
+                <div class="sample-grid">
+                    <!-- Replace src with your own images -->
+                    <div class="sample-item"><img src="https://picsum.photos/seed/hood1/200/200" alt="basic hood"><span>basic hood</span></div>
+                    <div class="sample-item"><img src="https://picsum.photos/seed/color1/200/200" alt="solid colour"><span>solid colour</span></div>
+                    <div class="sample-item"><img src="https://picsum.photos/seed/fit1/200/200" alt="simple fit"><span>simple fit</span></div>
+                </div>
+                <button class="btn-cta"><i class="fas fa-paper-plane"></i> commission basic</button>
+            </div>
+
+            <!-- REGULAR -->
+            <div class="card regular">
+                <div class="plan-name">Regular</div>
+                <div class="plan-price">$450 <small>USD</small></div>
+                <div class="divider"></div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Full pup hood + matching collar</li>
+                    <li><i class="fas fa-check-circle"></i> Two-tone colour design</li>
+                    <li><i class="fas fa-check-circle"></i> Padded interior &amp; jaw movement</li>
+                    <li><i class="fas fa-check-circle"></i> Custom ear shape (flop / point)</li>
+                    <li><i class="fas fa-check-circle"></i> 3–4 week turnaround</li>
+                </ul>
+                <div class="sample-tag"><i class="fas fa-images"></i> sample gallery</div>
+                <div class="sample-grid">
+                    <div class="sample-item"><img src="https://picsum.photos/seed/hood2/200/200" alt="hood + collar"><span>hood + collar</span></div>
+                    <div class="sample-item"><img src="https://picsum.photos/seed/twotone/200/200" alt="two-tone"><span>two-tone</span></div>
+                    <div class="sample-item"><img src="https://picsum.photos/seed/ears/200/200" alt="custom ears"><span>custom ears</span></div>
+                </div>
+                <button class="btn-cta"><i class="fas fa-paper-plane"></i> commission regular</button>
+            </div>
+
+            <!-- PREMIUM -->
+            <div class="card premium">
+                <div class="plan-name">Premium</div>
+                <div class="plan-price">$750 <small>USD</small></div>
+                <div class="divider"></div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Full fursuit head + matching paws</li>
+                    <li><i class="fas fa-check-circle"></i> Multi-colour / gradient airbrushing</li>
+                    <li><i class="fas fa-check-circle"></i> LED light-up eyes (optional)</li>
+                    <li><i class="fas fa-check-circle"></i> Moving jaw &amp; articulated ears</li>
+                    <li><i class="fas fa-check-circle"></i> Plush lining &amp; signature tag</li>
+                    <li><i class="fas fa-check-circle"></i> 5–6 week turnaround</li>
+                </ul>
+                <div class="sample-tag"><i class="fas fa-images"></i> sample gallery</div>
+                <div class="sample-grid">
+                    <div class="sample-item"><img src="https://picsum.photos/seed/head1/200/200" alt="full head"><span>full head</span></div>
+                    <div class="sample-item"><img src="https://picsum.photos/seed/led/200/200" alt="LED eyes"><span>LED eyes</span></div>
+                    <div class="sample-item"><img src="https://picsum.photos/seed/paws/200/200" alt="matching paws"><span>matching paws</span></div>
+                </div>
+                <button class="btn-cta"><i class="fas fa-paper-plane"></i> commission premium</button>
+            </div>
+        </div>
+
+        <!-- ====== SOCIAL MEDIA HANDLES (updated with your handles) ====== -->
+        <section class="social-section">
+            <h2>📱 connect with me</h2>
+            <p class="sub">follow for updates, WIPs, and open slots</p>
+            <div class="social-links">
+                <!-- Facebook -->
+                <a href="https://facebook.com/Jakiemarson" target="_blank">
+                    <i class="fab fa-facebook"></i> Jakiemarson <span class="handle">· facebook</span>
+                </a>
+                <!-- X (Twitter) -->
+                <a href="https://twitter.com/jakiemarson" target="_blank">
+                    <i class="fab fa-twitter"></i> @jakiemarson <span class="handle">· x / twitter</span>
+                </a>
+                <!-- Discord (profile link might not work, we use a placeholder) -->
+                <a href="#" target="_blank">
+                    <i class="fab fa-discord"></i> Jakiemarson <span class="handle">· discord</span>
+                </a>
+                <!-- Optional extra: Instagram (if you have one) – keep or remove -->
+                <a href="#" target="_blank">
+                    <i class="fab fa-instagram"></i> @pupcostumes <span class="handle">· instagram</span>
+                </a>
+                <!-- Email -->
+                <a href="mailto:pupcostumes@email.com" target="_blank">
+                    <i class="fas fa-envelope"></i> pupcostumes@email <span class="handle">· email</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ====== FOOTER ====== -->
+        <footer class="footer">
+            <i class="fas fa-paw"></i> &nbsp; PupCostumes — handmade with <i class="fas fa-heart" style="color:#c27a5a;"></i> for the furry community &bull; 2026
+        </footer>
+
+    </div>
+
+    <!-- ====== (optional) tiny JS for interactive CTA ====== -->
+    <script>
+        (function() {
+            const btns = document.querySelectorAll('.btn-cta');
+            btns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const plan = this.closest('.card').querySelector('.plan-name')?.innerText || 'package';
+                    alert(`✨ You're starting a ${plan} commission! \nPlease DM me on socials to get started.`);
+                });
+            });
+        })();
+    </script>
+
+</body>
+</html>

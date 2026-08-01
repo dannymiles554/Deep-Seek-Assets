@@ -16,12 +16,14 @@ export default function App() {
         <FeaturedProducts />
         <About />
         <Process />
+        <Pricing />
         <CustomOrders />
         <Testimonials />
         <Gallery />
         <FAQ />
         <CTASection />
         <ContactBar />
+        <Social />
       </main>
       <Footer />
     </div>
@@ -42,6 +44,7 @@ function Header() {
   const links = [
     { label: "Home", href: "#" },
     { label: "Shop", href: "#products" },
+    { label: "Pricing", href: "#pricing" },
     { label: "About", href: "#about" },
     { label: "Gallery", href: "#gallery" },
     { label: "Custom", href: "#custom" },
@@ -850,6 +853,298 @@ function CTASection() {
         </a>
       </div>
     </section>
+  );
+}
+
+/* ===================== PRICING ===================== */
+const PLANS = [
+  {
+    tier: "Basic",
+    price: "$250",
+    accentColor: "#9A8E7E",
+    features: [
+      "Standard pup hood (one colour)",
+      "Eye mesh & ventilation",
+      "Adjustable straps",
+      "2–3 week turnaround",
+    ],
+    samples: [
+      { src: "hood-neon-green.jpeg", label: "solid colour" },
+      { src: "collar-black.jpeg", label: "basic collar" },
+      { src: "kneepads.jpeg", label: "knee pads" },
+    ],
+    cta: "Commission Basic",
+  },
+  {
+    tier: "Regular",
+    price: "$450",
+    accentColor: "#D4AF37",
+    features: [
+      "Full pup hood + matching collar",
+      "Two-tone colour design",
+      "Padded interior & jaw movement",
+      "Custom ear shape (flop / point)",
+      "3–4 week turnaround",
+    ],
+    samples: [
+      { src: "hood-red-gold.jpeg", label: "hood + collar" },
+      { src: "hood-blue-black.jpeg", label: "two-tone" },
+      { src: "collar-harness-set.jpeg", label: "matching set" },
+    ],
+    cta: "Commission Regular",
+    popular: true,
+  },
+  {
+    tier: "Premium",
+    price: "$750",
+    accentColor: "#C07A3A",
+    features: [
+      "Full hood + matching paw mitts",
+      "Multi-colour / gradient design",
+      "LED light-up eyes (optional)",
+      "Moving jaw & articulated ears",
+      "Plush lining & signature tag",
+      "5–6 week turnaround",
+    ],
+    samples: [
+      { src: "hood-purple-silver.jpeg", label: "full hood" },
+      { src: "paw-gloves.jpeg", label: "paw mitts" },
+      { src: "harness-black-red.jpeg", label: "full kit" },
+    ],
+    cta: "Commission Premium",
+  },
+];
+
+function Pricing() {
+  return (
+    <section
+      id="pricing"
+      style={{
+        padding: "100px 24px",
+        background: "#0F0A05",
+        backgroundImage: `
+          radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 70%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='none'/%3E%3Ccircle cx='30' cy='30' r='0.8' fill='rgba(212,175,55,0.06)'/%3E%3C/svg%3E")
+        `,
+      }}
+    >
+      <div className="max-w-[1200px] mx-auto">
+        <div className="text-center mb-16">
+          <span
+            className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+            style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+          >
+            Commission Tiers
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: "#FDF8F0" }}>
+            Choose Your <span style={{ color: "#D4AF37" }}>Package</span>
+          </h2>
+          <p className="text-lg max-w-xl mx-auto" style={{ color: "rgba(253,248,240,0.6)" }}>
+            Every tier is fully handcrafted to order. DM or email to start your commission.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          {PLANS.map((plan) => (
+            <PricingCard key={plan.tier} {...plan} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PricingCard({
+  tier, price, accentColor, features, samples, cta, popular,
+}: {
+  tier: string; price: string; accentColor: string; features: string[];
+  samples: { src: string; label: string }[]; cta: string; popular?: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="flex flex-col rounded-2xl overflow-hidden relative"
+      style={{
+        background: "#1A1208",
+        border: hovered ? `1px solid ${accentColor}80` : "1px solid rgba(212,175,55,0.1)",
+        borderTop: `6px solid ${accentColor}`,
+        transform: hovered ? "translateY(-8px)" : "translateY(0)",
+        boxShadow: hovered ? `0 28px 64px rgba(0,0,0,0.6), 0 0 0 1px ${accentColor}30` : "0 4px 24px rgba(0,0,0,0.5)",
+        transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+      }}
+    >
+      {popular && (
+        <div
+          className="absolute top-5 right-5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest"
+          style={{ background: accentColor, color: "#0F0A05" }}
+        >
+          Most Popular
+        </div>
+      )}
+
+      <div className="p-8 flex-1 flex flex-col">
+        {/* Tier name */}
+        <h3 className="text-2xl font-black mb-1" style={{ color: "#FDF8F0" }}>{tier}</h3>
+        {/* Price */}
+        <div className="mb-1">
+          <span className="text-4xl font-black" style={{ color: accentColor }}>{price}</span>
+          <span className="text-sm ml-1" style={{ color: "rgba(253,248,240,0.45)" }}>USD</span>
+        </div>
+        {/* Divider */}
+        <div className="w-10 h-[3px] rounded-full mb-6" style={{ background: accentColor + "55" }} />
+
+        {/* Features */}
+        <ul className="space-y-2.5 mb-6 flex-1">
+          {features.map((f) => (
+            <li key={f} className="flex items-start gap-2.5 text-[15px]" style={{ color: "rgba(253,248,240,0.75)" }}>
+              <span className="mt-[3px] text-sm flex-shrink-0" style={{ color: accentColor }}>✓</span>
+              {f}
+            </li>
+          ))}
+        </ul>
+
+        {/* Sample image grid */}
+        <p className="text-[11px] font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(253,248,240,0.4)" }}>
+          Sample Gallery
+        </p>
+        <div className="grid grid-cols-3 gap-2 mb-6">
+          {samples.map((s) => (
+            <div
+              key={s.src}
+              className="relative rounded-xl overflow-hidden"
+              style={{ aspectRatio: "1/1", border: "1px solid rgba(212,175,55,0.12)" }}
+            >
+              <img src={img(s.src)} alt={s.label} className="w-full h-full object-cover" />
+              <div
+                className="absolute bottom-0 left-0 right-0 text-center py-1 text-[9px] font-semibold uppercase tracking-wide"
+                style={{ background: "rgba(15,10,5,0.75)", color: "rgba(253,248,240,0.85)", backdropFilter: "blur(4px)" }}
+              >
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA button */}
+        <a
+          href="mailto:jakiemarson104@gmail.com"
+          className="block text-center py-3.5 rounded-full font-bold text-[15px]"
+          style={{
+            background: hovered ? accentColor : "transparent",
+            color: hovered ? "#0F0A05" : accentColor,
+            border: `1.5px solid ${accentColor}`,
+            transition: "all 0.3s",
+          }}
+        >
+          {cta} →
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== SOCIAL ===================== */
+const SOCIALS = [
+  {
+    icon: "f",
+    platform: "Facebook",
+    handle: "Jakiemarson",
+    href: "https://facebook.com/Jakiemarson",
+    bg: "#1877F2",
+  },
+  {
+    icon: "𝕏",
+    platform: "X / Twitter",
+    handle: "@jakiemarson",
+    href: "https://twitter.com/jakiemarson",
+    bg: "#14171A",
+  },
+  {
+    icon: "⌨",
+    platform: "Discord",
+    handle: "Jakiemarson",
+    href: "#",
+    bg: "#5865F2",
+  },
+  {
+    icon: "◈",
+    platform: "Instagram",
+    handle: "@pupcostumes",
+    href: "#",
+    bg: "#E1306C",
+  },
+  {
+    icon: "✉",
+    platform: "Email",
+    handle: "jakiemarson104@gmail.com",
+    href: "mailto:jakiemarson104@gmail.com",
+    bg: "#D4AF37",
+  },
+];
+
+function Social() {
+  return (
+    <section
+      style={{
+        padding: "80px 24px",
+        background: "#100C06",
+        borderTop: "1px solid rgba(212,175,55,0.12)",
+      }}
+    >
+      <div className="max-w-[800px] mx-auto text-center">
+        <span
+          className="inline-block px-4 py-1.5 rounded-full font-semibold text-[13px] uppercase tracking-widest mb-4"
+          style={{ background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.25)" }}
+        >
+          Connect
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: "#FDF8F0" }}>
+          Find Us On <span style={{ color: "#D4AF37" }}>Social</span>
+        </h2>
+        <p className="mb-10 text-[15px]" style={{ color: "rgba(253,248,240,0.5)" }}>
+          Follow for WIPs, new colourways, open slots & community updates
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-4">
+          {SOCIALS.map((s) => (
+            <SocialChip key={s.platform} {...s} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SocialChip({
+  icon, platform, handle, href, bg,
+}: { icon: string; platform: string; handle: string; href: string; bg: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="flex items-center gap-3 px-5 py-3 rounded-full font-medium text-[15px] no-underline"
+      style={{
+        background: hovered ? bg : "#1A1208",
+        color: hovered ? "#FDF8F0" : "rgba(253,248,240,0.8)",
+        border: `1px solid ${hovered ? bg : "rgba(212,175,55,0.2)"}`,
+        transform: hovered ? "translateY(-3px) scale(1.03)" : "translateY(0) scale(1)",
+        boxShadow: hovered ? `0 12px 32px ${bg}40` : "none",
+        transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
+        textDecoration: "none",
+      }}
+    >
+      <span className="text-xl leading-none">{icon}</span>
+      <span>
+        <span className="font-bold">{handle}</span>
+        <span className="text-[12px] ml-1.5 opacity-60">· {platform}</span>
+      </span>
+    </a>
   );
 }
 
